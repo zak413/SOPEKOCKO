@@ -4,8 +4,8 @@ const fs = require('fs');
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
-    sauceObject.likes = 0;  
-    sauceObject.dislikes = 0; 
+    sauceObject.likes = 0; 
+    sauceObject.dislikes = 0;
     sauceObject.usersLiked = Array(); 
     sauceObject.usersDisliked = Array(); 
   const sauce = new Sauce({
@@ -46,6 +46,7 @@ exports.modifySauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+
     .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
     .catch(error => res.status(400).json({ error }));
 };
@@ -53,7 +54,7 @@ exports.modifySauce = (req, res, next) => {
 
 
 exports.likeOrDislike = (req, res, next) => {
-    if(req.body.like === 1){// utilisateur aime la sauce
+    if(req.body.like === 1){
         Sauce.updateOne({ _id: req.params.id },  {$inc: {likes: req.body.like++} ,$push: {usersLiked: req.body.userId}})
         .then ((sauce)=> res.status(200).json({ message: 'Un like de plus !'}))
         .catch(error => res.status(400).json({ error }));
@@ -61,7 +62,7 @@ exports.likeOrDislike = (req, res, next) => {
         Sauce.updateOne({ _id: req.params.id },  {$inc: {dislikes: (req.body.like++)*-1} ,$push: {usersDisliked: req.body.userId}})
         .then ((sauce)=> res.status(200).json({ message: 'Un dislike de plus !'}))
         .catch(error => res.status(400).json({ error }));
-    } else{ //like vaut 0
+    } else{ 
         
         Sauce.findOne({_id: req.params.id})
             .then(sauce => {
