@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 
 const path = require('path');
-const stuffRoutes = require('./routes/stuff');
+const stuffRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 mongoose.connect(process.env.BDD_URL,
