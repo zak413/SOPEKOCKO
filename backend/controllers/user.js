@@ -1,12 +1,18 @@
+// plugin
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 const User = require('../models/User');
 
+//inscription
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, 10) // hachage bcrypt du mot de passe
     .then(hash => {
+	  let buff = new Buffer(req.body.email);
+	  let emailBase64 = buff.toString('base64');
+	  
       const user = new User({
-        email: req.body.email,
+        email: emailBase64,
         password: hash
       });
       user.save()
@@ -16,8 +22,13 @@ exports.signup = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
+// connexion 
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
+	let buff = new Buffer(req.body.email);
+	let emailBase64 = buff.toString('base64');
+	
+	
+  User.findOne({ email: emailBase64 }) // on retrouve le user avec l'adresse mail
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -27,7 +38,7 @@ exports.login = (req, res, next) => {
           if (!valid) {
             return res.status(401).json({ error: 'Mot de passe incorrect !' });
           }
-          res.status(200).json({userId: user._id,token: jwt.sign( { userId: user._id },'RANDOM_TOKEN_SECRET',{ expiresIn: '24h' }) });
+          res.status(200).json({userId: user._id,token: jwt.sign( { userId: user._id },'RANDOM_TOKEN_SECRET',{ expiresIn: '24h' }) }); // mise en place du token
         
         })
         .catch(error => res.status(500).json({ error }));

@@ -11,11 +11,15 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "buffer": "^5.6.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
+    "mongo-mask": "^1.1.0",
     "mongoose": "^5.10.4",
     "mongoose-unique-validator": "^2.0.3",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "password-validator": "^5.1.0"
   }
 }
