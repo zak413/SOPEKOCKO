@@ -1,9 +1,9 @@
 const passwordValidator = require('password-validator');
  
-// Create a schema
+// création du schema
 const passwordSchema = new passwordValidator();
  
-// Add properties to it
+// ajout des propriétés
 passwordSchema
 .is().min(8)                                    // Minimum length 8
 .is().max(100)                                  // Maximum length 100

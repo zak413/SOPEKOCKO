@@ -1,16 +1,16 @@
-const Sauce = require('../models/sauce');
+const Sauce = require('../models/sauce'); //modéle
 const fs = require('fs'); // plugin
 
 
 // création de sauce
 exports.createSauce = (req, res, next) => {
 	const sauceObject = JSON.parse(req.body.sauce);
-	delete sauceObject._id;
+	delete sauceObject._id;  //Suppression de l'id venant du frontend
     sauceObject.likes = 0; 
     sauceObject.dislikes = 0;
     sauceObject.usersLiked = Array(); 
     sauceObject.usersDisliked = Array(); 
-	
+		
 	const sauce = new Sauce({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`

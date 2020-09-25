@@ -8,9 +8,11 @@ const User = require('../models/User');
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10) // hachage bcrypt du mot de passe
     .then(hash => {
-	  let buff = new Buffer(req.body.email);
+	  //utilisation de buffer et base64 pour masquer l'adresse mail dans la BDD
+	  let buff = new Buffer.from(req.body.email);
 	  let emailBase64 = buff.toString('base64');
 	  
+	  //Enregistrement nouvel utilisateur :
       const user = new User({
         email: emailBase64,
         password: hash
@@ -24,15 +26,17 @@ exports.signup = (req, res, next) => {
 
 // connexion 
 exports.login = (req, res, next) => {
-	let buff = new Buffer(req.body.email);
+	let buff = new Buffer.from(req.body.email);
 	let emailBase64 = buff.toString('base64');
 	
 	
-  User.findOne({ email: emailBase64 }) // on retrouve le user avec l'adresse mail
-    .then(user => {
-      if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-      }
+	User.findOne({ email: emailBase64 }) // on retrouve le user avec l'adresse mail
+		.then(user => {
+		  if (!user) {
+			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+		  }
+	  
+	   //Comparaison du password envoyé avec celui de la bdd :
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {
           if (!valid) {

@@ -1,3 +1,4 @@
+//Plugins :
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -6,6 +7,7 @@ const userSchema = mongoose.Schema({
   password: { type: String, required: true }
 });
 
+//Mise en place du plugin uniqueValidator pour email
 userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', userSchema);
